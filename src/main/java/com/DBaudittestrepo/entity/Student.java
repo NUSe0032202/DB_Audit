@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 //Including the withModifiedFlag will enable a flag indicator showing which property of the entity has been changed
-//Keycloak user:admin
-//PW: password
 @Entity
 @Audited(withModifiedFlag = true)
 @Table(name="student")
