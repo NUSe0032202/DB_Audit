@@ -9,20 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.servlet.ModelAndView;
+
 
 import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
-import java.io.IOException;
 import java.security.Principal;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -63,7 +56,6 @@ public class MainController {
     }
 
     @PostMapping("/insert")
-    //public ResponseEntity<String> createStudent(@RequestBody Student newStudent) {
     public String createStudent(@ModelAttribute("student") Student student,Model model) {
         System.out.print("Form Data: ");
         System.out.println(student.toString());
@@ -71,25 +63,21 @@ public class MainController {
         System.out.println("Attempting to insert new student into the DB");
         repository.save(student);
         return "landing";
-        //System.out.println("Attempting to save student");
-        //try{
-        //    repository.save(newStudent);
-        //} catch (Exception e) {
-        //    e.printStackTrace();
-            //return new ResponseEntity<String>("Error while saving!", HttpStatus.BAD_REQUEST);
-        //}
-        //return new ResponseEntity<String>("Saved!", HttpStatus.OK);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<String> updateStudent(@RequestBody Student updateStudent) {
+    //public ResponseEntity<String> updateStudent(@RequestBody Student updateStudent) {
+    public String updateStudent(@ModelAttribute("student") Student student,Model model) {
         System.out.println("Attempting to update student");
-        Student student = repository.findById(updateStudent.getId()).get();
-        student.setFirstName(updateStudent.getFirstName());
-        student.setLastName(updateStudent.getLastName());
-        student.setEmail(updateStudent.getEmail());
-        repository.save(student);
-        return new ResponseEntity<String>("Updated Student!", HttpStatus.OK);
+        System.out.print("Update Data: ");
+        System.out.println(student.toString());
+        Student student1 = repository.findById(student.getId()).get();
+        student1.setFirstName(student.getFirstName());
+        student1.setLastName(student.getLastName());
+        student1.setEmail(student.getEmail());
+        repository.save(student1);
+        model.addAttribute("student", new Student());
+        return "landing";
     }
 
     @PostMapping("/audit")

@@ -7,7 +7,7 @@
     <h1>
         Hello, <span th:text="${username}">--name--</span>
     </h1>
-
+   <h1>Insert Student: </h1>
     <form action="#" th:action="@{/insert}" th:object="${student}" method="post">
         <table>
             <tr>
@@ -52,7 +52,51 @@
             </tr>
         </table>
     </form>
-    </div>
+    <h1>Update Student: </h1>
+    <form action="#" th:action="@{/update}" th:object="${student}" method="post">
+        <table>
+            <tr>
+                <td>
+                    <label for="idUpdate">ID</label>
+                </td>
+                <td>
+                    <input id="idUpdate" type="number" th:field="*{id}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label for="firstNameUpdate">first name</label>
+                </td>
+                <td>
+                    <input id="firstNameUpdate" type="text" th:field="*{firstName}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label for="lastNameUpdate">last name</label>
+                </td>
+                <td>
+                    <input id="lastNameUpdate" type="text" th:field="*{lastName}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label for="emailUpdate">email</label>
+                </td>
+                <td>
+                    <input id="emailUpdate" type="text" th:field="*{email}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Insert Student">
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 <!-- container -->
 </body>
