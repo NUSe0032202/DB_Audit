@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: headerFragment">
+</head>
+<body>
+<div id="container">
+    <h1>
+        Hello, <span th:text="${username}">--name--</span>
+    </h1>
+
+    <form action="#" th:action="@{/insert}" th:object="${student}" method="post">
+        <table>
+            <tr>
+                <td>
+                    <label for="id">ID</label>
+                </td>
+                <td>
+                    <input id="id" type="number" th:field="*{id}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label for="firstName">first name</label>
+                </td>
+                <td>
+                    <input id="firstName" type="text" th:field="*{firstName}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label for="lastName">last name</label>
+                </td>
+                <td>
+                    <input id="lastName" type="text" th:field="*{lastName}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <label for="email">email</label>
+                </td>
+                <td>
+                    <input id="email" type="text" th:field="*{email}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Insert Student">
+                </td>
+            </tr>
+        </table>
+    </form>
+    </div>
+</div>
+<!-- container -->
+</body>
+</html>

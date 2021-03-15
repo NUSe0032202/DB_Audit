@@ -8,12 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.security.Principal;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
@@ -30,8 +37,21 @@ public class MainController {
     @Autowired
     private UserRepository repository;
 
-    //@Autowired
-    //private DataSource dataSource;
+    @ModelAttribute("student")
+    public Student getNewStudent(){
+        return  new Student();
+    }
+
+    @GetMapping(path = "/")
+    public String index() {
+        return "external";
+    }
+
+    @GetMapping(path = "/landing")
+    public String customers(Principal principal, Model model) {
+        model.addAttribute("username", principal.getName());
+        return "landing";
+    }
 
     @GetMapping(path="/retrieve")
     public ResponseEntity<List<Student>> getAllStudents() {
@@ -43,21 +63,28 @@ public class MainController {
     }
 
     @PostMapping("/insert")
-    public ResponseEntity<String> createStudent(@RequestBody Student newStudent) {
-        System.out.println("Attempting to save student");
-        try{
-            repository.save(newStudent);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<String>("Error while saving!", HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<String>("Saved!", HttpStatus.OK);
+    //public ResponseEntity<String> createStudent(@RequestBody Student newStudent) {
+    public String createStudent(@ModelAttribute("student") Student student,Model model) {
+        System.out.print("Form Data: ");
+        System.out.println(student.toString());
+        model.addAttribute("student", new Student());
+        System.out.println("Attempting to insert new student into the DB");
+        repository.save(student);
+        return "landing";
+        //System.out.println("Attempting to save student");
+        //try{
+        //    repository.save(newStudent);
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+            //return new ResponseEntity<String>("Error while saving!", HttpStatus.BAD_REQUEST);
+        //}
+        //return new ResponseEntity<String>("Saved!", HttpStatus.OK);
     }
 
     @PostMapping("/update")
     public ResponseEntity<String> updateStudent(@RequestBody Student updateStudent) {
         System.out.println("Attempting to update student");
-        Student student = repository.findById(3).get();
+        Student student = repository.findById(updateStudent.getId()).get();
         student.setFirstName(updateStudent.getFirstName());
         student.setLastName(updateStudent.getLastName());
         student.setEmail(updateStudent.getEmail());
@@ -80,17 +107,4 @@ public class MainController {
             System.out.println("________________________");
         }
     }
-
-   // @PostMapping("/print")
-   // public void printDataSource() {
-    //    System.out.println("Attempting to access the datasource object");
-      //  try {
-        //    Connection connection = dataSource.getConnection();
-        //    DatabaseMetaData metaData = connection.getMetaData();
-         //   System.out.println("Username: " + metaData.getUserName());
-       // } catch (Exception e) {
-
-       // }
-    //}
-
 }
